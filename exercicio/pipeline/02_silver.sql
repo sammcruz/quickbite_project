@@ -1,0 +1,2 @@
+-- SILVER: limpa, tipada, sem duplicidade. Quarentenas e relatório de qualidade.
+-- Requisitos: veja a seção 3.2 do notebook.

@@ -1,0 +1,10 @@
+command: ['streamlit', 'run', 'app.py']
+env:
+  - name: 'DATABRICKS_WAREHOUSE_ID'
+    valueFrom: 'sql-warehouse'
+  - name: 'QB_CATALOG'
+    value: 'workspace'
+  - name: 'QB_SCHEMA'
+    value: 'quickbite'
+  - name: 'QB_SLA_MIN'
+    value: '45'

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600" width="100%" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#44546a"/></marker>
+  </defs>
+  <rect width="1100" height="600" fill="#ffffff"/>
+  <text x="20" y="28" font-size="18" font-weight="bold" fill="#1f2d3d">QuickBite · arquitetura do job (ponta a ponta)</text>
+
+  <!-- linha de cima -->
+  <rect x="20" y="50" width="220" height="70" rx="8" fill="#eef2f7" stroke="#44546a"/>
+  <text x="130" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Arquivos de origem</text>
+  <text x="130" y="100" text-anchor="middle" font-size="12" fill="#44546a">volume quickbite_files</text>
+
+  <rect x="320" y="50" width="220" height="70" rx="8" fill="#eef2f7" stroke="#44546a"/>
+  <text x="430" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Simulador de chegada</text>
+  <text x="430" y="100" text-anchor="middle" font-size="12" fill="#44546a">notebook: copia 1 lote por vez</text>
+
+  <rect x="620" y="50" width="220" height="70" rx="8" fill="#fff4e0" stroke="#c77700" stroke-width="2"/>
+  <text x="730" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Volume landing</text>
+  <text x="730" y="100" text-anchor="middle" font-size="12" fill="#44546a">orders/ ratings/ restaurants/ couriers/</text>
+
+  <line x1="240" y1="85" x2="318" y2="85" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="540" y1="85" x2="618" y2="85" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- gatilho -->
+  <line x1="730" y1="120" x2="730" y2="168" stroke="#c77700" stroke-width="3" marker-end="url(#a)"/>
+  <text x="745" y="148" font-size="12" font-weight="bold" fill="#c77700">gatilho: chegada de arquivo novo</text>
+
+  <!-- job -->
+  <rect x="20" y="170" width="1060" height="290" rx="10" fill="#f7f9fc" stroke="#44546a" stroke-width="2"/>
+  <text x="36" y="194" font-size="14" font-weight="bold" fill="#1f2d3d">Job quickbite_etl</text>
+
+  <rect x="36" y="206" width="800" height="240" rx="8" fill="#ffffff" stroke="#44546a"/>
+  <text x="50" y="228" font-size="13" font-weight="bold" fill="#1f2d3d">Tarefa 1 · Pipeline declarativo (streaming tables + materialized views)</text>
+
+  <rect x="52" y="244" width="220" height="190" rx="8" fill="#f3e5d8" stroke="#8a5a2b"/>
+  <text x="162" y="266" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Bronze</text>
+  <text x="162" y="290" text-anchor="middle" font-size="12" fill="#44546a">streaming tables</text>
+  <text x="162" y="320" text-anchor="middle" font-size="12" fill="#1f2d3d">bronze_orders</text>
+  <text x="162" y="340" text-anchor="middle" font-size="12" fill="#1f2d3d">bronze_ratings</text>
+  <text x="162" y="360" text-anchor="middle" font-size="12" fill="#1f2d3d">bronze_restaurants</text>
+  <text x="162" y="380" text-anchor="middle" font-size="12" fill="#1f2d3d">bronze_couriers</text>
+  <text x="162" y="414" text-anchor="middle" font-size="11" fill="#44546a">cópia fiel + arquivo + hora</text>
+
+  <rect x="312" y="244" width="240" height="190" rx="8" fill="#e6eaf0" stroke="#5b6b7f"/>
+  <text x="432" y="266" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Silver</text>
+  <text x="432" y="290" text-anchor="middle" font-size="12" fill="#44546a">streaming (expectations + AUTO CDC)</text>
+  <text x="432" y="310" text-anchor="middle" font-size="12" fill="#1f2d3d">silver_orders · silver_ratings</text>
+  <text x="432" y="336" text-anchor="middle" font-size="12" fill="#44546a">materialized views</text>
+  <text x="432" y="356" text-anchor="middle" font-size="12" fill="#1f2d3d">order_items · customers</text>
+  <text x="432" y="374" text-anchor="middle" font-size="12" fill="#1f2d3d">restaurants · couriers</text>
+  <text x="432" y="396" text-anchor="middle" font-size="12" fill="#a63d2f">quarantine_orders · quarantine_ratings</text>
+  <text x="432" y="414" text-anchor="middle" font-size="12" fill="#1f2d3d">silver_quality_report</text>
+
+  <rect x="592" y="244" width="228" height="190" rx="8" fill="#fbf3d0" stroke="#a88a00"/>
+  <text x="706" y="266" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Gold</text>
+  <text x="706" y="290" text-anchor="middle" font-size="12" fill="#44546a">materialized views</text>
+  <text x="706" y="318" text-anchor="middle" font-size="12" fill="#1f2d3d">dim_date · dim_restaurant</text>
+  <text x="706" y="336" text-anchor="middle" font-size="12" fill="#1f2d3d">dim_courier · dim_customer · dim_dish</text>
+  <text x="706" y="360" text-anchor="middle" font-size="12" fill="#1f2d3d">fact_orders · fact_order_items</text>
+  <text x="706" y="384" text-anchor="middle" font-size="12" fill="#1f2d3d">gold_daily_kpis · restaurant_summary</text>
+  <text x="706" y="402" text-anchor="middle" font-size="12" fill="#1f2d3d">courier_summary · dish_ranking</text>
+  <text x="706" y="420" text-anchor="middle" font-size="12" fill="#1f2d3d">hourly_demand · rating_reasons</text>
+
+  <line x1="272" y1="340" x2="310" y2="340" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="552" y1="340" x2="590" y2="340" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- tarefa 2 -->
+  <rect x="880" y="206" width="184" height="240" rx="8" fill="#ffffff" stroke="#44546a"/>
+  <text x="972" y="228" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f2d3d">Tarefa 2</text>
+  <text x="972" y="290" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Atualizar o app</text>
+  <text x="972" y="312" text-anchor="middle" font-size="12" fill="#44546a">deploy / restart</text>
+  <text x="972" y="330" text-anchor="middle" font-size="12" fill="#44546a">do Databricks App</text>
+  <text x="972" y="372" text-anchor="middle" font-size="11" fill="#44546a">roda só se a tarefa 1</text>
+  <text x="972" y="388" text-anchor="middle" font-size="11" fill="#44546a">terminar com sucesso</text>
+  <line x1="836" y1="326" x2="878" y2="326" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- app -->
+  <rect x="730" y="500" width="330" height="70" rx="8" fill="#e3f1e6" stroke="#2e7d32" stroke-width="2"/>
+  <text x="895" y="530" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f2d3d">Databricks App (Streamlit)</text>
+  <text x="895" y="550" text-anchor="middle" font-size="12" fill="#44546a">filtros, KPIs, gráficos e relatório de qualidade</text>
+  <line x1="972" y1="446" x2="972" y2="498" stroke="#44546a" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M706,434 L706,534 L728,534" fill="none" stroke="#2e7d32" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#a)"/>
+  <text x="560" y="520" font-size="12" fill="#2e7d32">o app lê só a gold, via SQL warehouse</text>
+
+  <text x="20" y="560" font-size="12" fill="#44546a">Streaming tables processam só o que chegou. Materialized views recalculam o que mudou.</text>
+  <text x="20" y="578" font-size="12" fill="#44546a">Rejeitados vão para a quarentena com o motivo; nada some em silêncio.</text>
+</svg>

@@ -36,7 +36,7 @@ FROM (
          WHEN hour(to_timestamp(created_at)) BETWEEN 18 AND 23 THEN 'dinner'
          ELSE 'other' END AS meal_period,
     CASE WHEN status = 'delivered'
-         THEN round((unix_timestamp(to_timestamp(delivered_at)) - unix_timestamp(to_timestamp(created_at))) / 60.0, 1) END AS delivery_minutes,
+         THEN CAST(round((unix_timestamp(to_timestamp(delivered_at)) - unix_timestamp(to_timestamp(created_at))) / 60.0, 1) AS DOUBLE) END AS delivery_minutes,
     transform(items, i -> named_struct(
       'dish', trim(i.dish),
       'quantity', CAST(i.qty AS INT),

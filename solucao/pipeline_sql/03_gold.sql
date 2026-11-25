@@ -65,7 +65,13 @@ AS SELECT
   CAST(CASE WHEN o.status = 'cancelled' THEN o.order_total ELSE 0 END AS DECIMAL(12,2)) AS lost_revenue,
   r.stars, r.comment
 FROM silver_orders o
-LEFT JOIN silver_ratings r ON r.order_id = o.order_id AND o.status = 'delivered';
+LEFT JOIN silver_ratings r ON r.order_id = o.order_id AND o.status = 'delivered'
+-- Os joins abaixo não trazem colunas: existem para o pipeline criar as dimensões ANTES do fato,
+-- já que uma FK só pode ser declarada depois que a PK da tabela referenciada existe.
+LEFT JOIN dim_date dd ON dd.date_key = o.order_date
+LEFT JOIN dim_restaurant dr ON dr.restaurant_id = o.restaurant_id
+LEFT JOIN dim_courier dc ON dc.courier_id = o.courier_id
+LEFT JOIN dim_customer dcu ON dcu.customer_id = o.customer_id;
 
 CREATE OR REFRESH MATERIALIZED VIEW fact_order_items (
   order_id STRING NOT NULL, line_no INT NOT NULL, dish STRING, quantity INT, unit_price DECIMAL(10,2), line_total DECIMAL(12,2),
@@ -76,7 +82,9 @@ CREATE OR REFRESH MATERIALIZED VIEW fact_order_items (
 )
 COMMENT 'Um registro por item de pedido'
 AS SELECT i.order_id, i.line_no, i.dish, i.quantity, i.unit_price, i.line_total, o.order_date, o.restaurant_id, o.status
-FROM silver_order_items i JOIN silver_orders o ON o.order_id = i.order_id;
+FROM silver_order_items i
+JOIN fact_orders o ON o.order_id = i.order_id   -- lê o fato (e não a silver) para ser criado depois dele
+JOIN dim_dish d ON d.dish = i.dish;             -- idem para a dimensão de pratos
 
 -- ---------- marts de KPI (consumo do app)
 CREATE OR REFRESH MATERIALIZED VIEW gold_daily_kpis

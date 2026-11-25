@@ -423,7 +423,7 @@ else:
 # MAGIC
 # MAGIC | Item | Requisito |
 # MAGIC |---|---|
-# MAGIC | Gatilho | **Chegada de arquivo** no volume landing. Espere alguns segundos após a última mudança (um lote são vários arquivos) e não dispare mais de uma vez por minuto |
+# MAGIC | Gatilho | **Chegada de arquivo** no volume landing. Espere após a última mudança (um lote são vários arquivos): o valor tem de ser **maior que 60 segundos**. Não dispare mais de uma vez por minuto |
 # MAGIC | Tarefa 1 | Atualização do **pipeline** (incremental, **sem** full refresh) |
 # MAGIC | Tarefa 2 | **Só se a 1 der certo**: validar que a gold tem dados e reimplantar o app. Use o notebook `apoio/02_deploy_app` |
 # MAGIC | Concorrência | Uma execução por vez |
@@ -449,7 +449,7 @@ job = w.jobs.create(
     trigger=jobs.TriggerSettings(
         pause_status=jobs.PauseStatus.UNPAUSED,
         file_arrival=jobs.FileArrivalTriggerConfiguration(
-            url=LANDING + "/", min_time_between_triggers_seconds=60, wait_after_last_change_seconds=30)),
+            url=LANDING + "/", min_time_between_triggers_seconds=60, wait_after_last_change_seconds=61)),
     tasks=[
         jobs.Task(task_key="pipeline", pipeline_task=jobs.PipelineTask(pipeline_id=PIPELINE_ID, full_refresh=False)),
         jobs.Task(task_key="atualizar_app", depends_on=[jobs.TaskDependency(task_key="pipeline")],
@@ -466,7 +466,7 @@ print("job criado:", job.job_id)
 # COMMAND ----------
 
 import time
-time.sleep(45)   # tempo do gatilho perceber o arquivo novo
+time.sleep(150)   # o gatilho espera mais de 60 s depois da última mudança, mais o tempo de subir o job
 for r in w.jobs.list_runs(job_id=job.job_id, limit=5):
     print(r.run_id, r.state.life_cycle_state.value if r.state and r.state.life_cycle_state else "?",
           r.state.result_state.value if r.state and r.state.result_state else "-")

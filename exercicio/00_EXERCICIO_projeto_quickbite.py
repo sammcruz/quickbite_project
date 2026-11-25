@@ -339,7 +339,7 @@ for p in ["orders", "ratings", "restaurants", "couriers"]:
 # MAGIC
 # MAGIC | Item | Requisito |
 # MAGIC |---|---|
-# MAGIC | Gatilho | **Chegada de arquivo** no volume landing. Espere alguns segundos após a última mudança (um lote são vários arquivos) e não dispare mais de uma vez por minuto |
+# MAGIC | Gatilho | **Chegada de arquivo** no volume landing. Espere após a última mudança (um lote são vários arquivos): o valor tem de ser **maior que 60 segundos**. Não dispare mais de uma vez por minuto |
 # MAGIC | Tarefa 1 | Atualização do **pipeline** (incremental, **sem** full refresh) |
 # MAGIC | Tarefa 2 | **Só se a 1 der certo**: validar que a gold tem dados e reimplantar o app. Use o notebook `apoio/02_deploy_app` |
 # MAGIC | Concorrência | Uma execução por vez |

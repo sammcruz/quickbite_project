@@ -1,0 +1,3 @@
+-- BRONZE: cópia fiel dos arquivos que chegam no landing.
+-- Parâmetros do pipeline (Configuration): ${landing_path}, ${sla_minutes}, ${qb_catalog}, ${qb_schema}
+-- Requisitos: veja a seção 3.1 do notebook.

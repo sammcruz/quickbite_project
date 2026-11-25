@@ -1,0 +1,2 @@
+-- GOLD: dimensões, fatos e KPIs, com PKs e FKs informativas.
+-- Requisitos: veja a seção 3.3 do notebook.

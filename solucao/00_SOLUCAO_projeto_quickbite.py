@@ -71,6 +71,11 @@ nb = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookP
 RAIZ_REPO = os.path.dirname(os.path.dirname(nb))   # pasta do Git folder no workspace
 print("origem :", ORIGEM); print("landing:", LANDING); print("repo   :", RAIZ_REPO)
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{catalogo}`.`{schema}`")
+
+# o volume de landing e as pastas precisam existir antes do pipeline
+spark.sql(f"CREATE VOLUME IF NOT EXISTS `{catalogo}`.`{schema}`.`{dbutils.widgets.get('volume_landing').strip()}`")
+for _p in ["orders", "ratings", "restaurants", "couriers"]:
+    os.makedirs(f"{LANDING}/{_p}", exist_ok=True)
 display(dbutils.fs.ls(ORIGEM))
 
 # COMMAND ----------
@@ -130,7 +135,7 @@ display(spark.read.option("header", True).csv(f"{ORIGEM}/restaurants.csv"))
 
 # MAGIC %md
 # MAGIC ## 2. Landing e simulador de chegada
-# MAGIC Os arquivos **não** vão direto para o pipeline: chegam num volume `landing`. Abra o notebook `apoio/01_simulador_landing`, configure os mesmos catálogo/schema e **copie o lote 1**. Depois volte aqui.
+# MAGIC Os arquivos **não** vão direto para o pipeline: chegam num volume `landing`. Abra o notebook `apoio/01_simulador_landing`, configure os mesmos catálogo/schema e **copie o lote 1** (sem isso o pipeline não tem o que ler e falha). Depois volte aqui.
 # MAGIC
 # MAGIC **Pense:**
 # MAGIC - Por que é útil separar *origem*, *landing* e *tabelas*?
@@ -264,6 +269,7 @@ else:
 
 # COMMAND ----------
 
+assert glob.glob(f"{LANDING}/orders/*.json"), "Landing vazio: rode o notebook apoio/01_simulador_landing (lote 1) antes de executar o pipeline."
 upd = w.pipelines.start_update(pipeline_id=PIPELINE_ID)
 w.pipelines.wait_get_pipeline_idle(PIPELINE_ID)
 print("update:", upd.update_id, "| estado:", w.pipelines.get_update(PIPELINE_ID, upd.update_id).update.state)
